@@ -13,29 +13,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class GlobalExceptionHandlerTest {
-
+class AnimalControllerTest {
 
     @Autowired
     MockMvc mockMvc;
     @Test
-    void handleNoSuchElementException_In_GlobalExceptionHandlerClass_NoCarsFound() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/cars"))
-            .andExpect(status().isNotFound())
-            .andExpect(content().json(""" 
-                    {"errorMessage": "Oops, something went wrong here..No Cars found"}
-"""));
-    }
-
-    @Test
-    void handleNoSuchElementException_In_GlobalExceptionHandlerClass_NoAnimalsFound() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/animals"))
-                .andExpect(status().isNotFound())
+    void handleIllegalArgumentException() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/animals/{species}","cat"))
+                .andExpect(status().isBadRequest())
                 .andExpect(content().json(""" 
-                    {"errorMessage": "Oops, something went wrong here..No Animals found"}
+                    {"errorMessage": "This specie is not available.. Only 'dog' is allowed"}
 """));
     }
-
-
 }
-
